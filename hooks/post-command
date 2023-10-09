@@ -13,13 +13,19 @@ function createAnnotationFile {
   fi
 }
 
+function logsURL {
+  local url
+  url="${BUILDKITE_BUILD_URL}#${BUILDKITE_JOB_ID}"
+  echo "${url}"
+}
+
 function report {
   local pr_num
   pr_num="${BUILDKITE_PULL_REQUEST:-''}"
 
   createAnnotationFile
   cat << EOF >> ${ANNOTATION_FILE}
-* Check \`${BUILDKITE_JOB_LABEL}\` failed ❌ - (logs)[logs]
+  * Check \`${BUILDKITE_LABEL}\` failed ❌ - [View logs]($(logsURL))
 EOF
 
   if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  "${pr_num}" != "" ]]; then

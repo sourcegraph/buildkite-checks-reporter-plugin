@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ANNOTATION_FILE="./annotations/checks.md"
+
+function createAnnotationFile {
+  if [[ ! -f ${ANNOTATION_FILE} ]]; then
+    local dir
+    dir=$(dirname "${ANNOTATION_FILE}")
+    mkdir -p "${dir}"
+    echo "### Check failures" >> "${ANNOTATION_FILE}"
+  fi
+}
+
+function report {
+  local pr_num
+  pr_num="${BUILDKITE_PULL_REQUEST:-''}"
+
+  createAnnotationFile
+  cat << EOF >> ${ANNOTATION_FILE}
+* Check \`${BUILDKITE_JOB_LABEL}\` failed ❌ - (logs)[logs]
+EOF
+
+  if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  "${pr_num}" != "" ]]; then
+    echo "gh pr comment -F \"${ANNOTATION_FILE}\" --edit-last \"${pr_num}\""
+  fi
+}
+
+if [[ "${BUILDKITE_COMMAND_EXIT_STATUS:-0}" -ne 0 ]]; then
+  echo "--- :doctor: writing check failure report"
+  report
+fi

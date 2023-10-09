@@ -1,0 +1,7 @@
+name: Checks reporter plugin
+description: Posts reports on PRs as comments when checks fail
+author: https://github.com/sourcegraph
+requirements:
+  - asdf
+  - gh
+configuration:

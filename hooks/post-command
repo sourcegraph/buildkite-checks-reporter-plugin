@@ -31,7 +31,7 @@ EOF
   buildkite-agent annotate --style error < ${ANNOTATION_FILE}
 
 
-  if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  "${pr_num}" != "" ]]; then
+  if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  ! -z "${pr_num}" ]]; then
     echo "gh pr comment -F \"${ANNOTATION_FILE}\" --edit-last \"${pr_num}\""
   else
     echo "Not creating PR - PR is not DRAFT"

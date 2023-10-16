@@ -25,11 +25,16 @@ function report {
 
   createAnnotationFile
   cat << EOF >> ${ANNOTATION_FILE}
-  * Check \`${BUILDKITE_LABEL}\` failed ❌ - [View logs]($(logsURL))
+* Check \`${BUILDKITE_LABEL}\` failed ❌ - [View logs]($(logsURL))
 EOF
+
+  buildkite-agent annotate --style error < ${ANNOTATION_FILE}
+
 
   if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  "${pr_num}" != "" ]]; then
     echo "gh pr comment -F \"${ANNOTATION_FILE}\" --edit-last \"${pr_num}\""
+  else
+    echo "Not creating PR - PR is not DRAFT"
   fi
 }
 

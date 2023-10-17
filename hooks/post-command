@@ -26,12 +26,12 @@ function report {
   createAnnotationFile
   cat << EOF >> ${ANNOTATION_FILE}
   <div class="flex mb1">
-    <div class="ml-auto">":clipboard: General Checks"</div>
-    <ul>
-      <li>* Check \`${BUILDKITE_LABEL}\` failed ❌ - <a href=$(logsURL)>View logs]</a></li>
-    </ul>
-    </div>
+    Some checks have failed
+    <div class="ml-auto">:clipboard: General Checks</div>
   </div>
+  <ul>
+    <li>* Check <code>${BUILDKITE_LABEL}</code> failed ❌ - <a href=$(logsURL)>View logs</a></li>
+  </ul>
 
 EOF
 

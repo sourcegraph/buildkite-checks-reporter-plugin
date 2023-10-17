@@ -9,7 +9,7 @@ function createAnnotationFile {
     local dir
     dir=$(dirname "${ANNOTATION_FILE}")
     mkdir -p "${dir}"
-    echo "### Check failures" >> "${ANNOTATION_FILE}"
+    touch "${ANNOTATION_FILE}"
   fi
 }
 
@@ -25,7 +25,14 @@ function report {
 
   createAnnotationFile
   cat << EOF >> ${ANNOTATION_FILE}
-* Check \`${BUILDKITE_LABEL}\` failed ❌ - [View logs]($(logsURL))
+  <div class="flex mb1">
+    <div class="ml-auto">":clipboard: General Checks"</div>
+    <ul>
+      <li>* Check \`${BUILDKITE_LABEL}\` failed ❌ - <a href=$(logsURL)>View logs]</a></li>
+    </ul>
+    </div>
+  </div>
+
 EOF
 
   buildkite-agent annotate --style error < ${ANNOTATION_FILE}

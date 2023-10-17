@@ -30,9 +30,12 @@ EOF
 
   buildkite-agent annotate --style error < ${ANNOTATION_FILE}
 
-
   if [[ "${BUILDKITE_PULL_REQUEST_DRAFT:-''}" != "true" &&  ! -z "${pr_num}" ]]; then
-    echo "gh pr comment -F \"${ANNOTATION_FILE}\" --edit-last \"${pr_num}\""
+    if [[ "${BUILDKITE_RETRY_COUNT:-0}" -eq 0 ]]; then
+      echo "gh pr comment -F \"${ANNOTATION_FILE}\" \"${pr_num}\""
+    else
+      echo "gh pr comment -F \"${ANNOTATION_FILE}\" --edit-last \"${pr_num}\""
+    fi
   else
     echo "Not creating PR - PR is not DRAFT"
   fi
